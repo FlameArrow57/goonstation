@@ -241,7 +241,9 @@ ADMIN_INTERACT_PROCS(/obj/window, proc/smash)
 				smash()
 		UpdateIcon()
 
-	ex_act(severity)
+	ex_act(severity, last_touched, power, datum/explosion/explosion)
+		if (explosion?.turf_safe)
+			return
 		// Current windows have 30 HP
 		// Reinforced windows, about 130
 		// Plasma glass, 330 HP

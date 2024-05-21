@@ -338,10 +338,7 @@
 			return ..()
 
 	ex_act(severity)
-		if (isrestrictedz(src.z))
-			return
-		else
-			return ..()
+		return
 
 	track_blood()
 		src.tracked_blood = null

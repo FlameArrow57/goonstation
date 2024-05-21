@@ -58,69 +58,63 @@ var/datum/explosion_controller/explosions
 		exploding = 1
 		RL_Suspend()
 
-		var/p
+		// explosion power against non-objects
+		var/atom_power
+		var/atom_severity
+		// explosion power against objects specifically
+		var/obj_power
+		var/obj_severity
 		var/datum/explosion/explosion
 
 		for (var/turf/T as anything in queued_turfs)
 			queued_turfs[T] = 2 * (queued_turfs[T])**(1 / (2 * STACKED_EXPLOSION_DIMISHING_RETURNS_SCALING))
-			p = queued_turfs[T]
+			atom_power = queued_turfs[T]
 			explosion = queued_turfs_blame[T]
-			if (p >= 6)
-				for (var/mob/M in T)
-					M.ex_act(1, explosion?.last_touched, p, explosion)
-			else if (p > 3)
-				for (var/mob/M in T)
-					M.ex_act(2, explosion?.last_touched, p, explosion)
+
+			if (atom_power >= 6)
+				atom_severity = 1
+			else if (atom_power > 3)
+				atom_severity = 2
 			else
-				for (var/mob/M in T)
-					M.ex_act(3, explosion?.last_touched, p, explosion)
+				atom_severity = 3
 
-		LAGCHECK(LAG_HIGH)
+			for (var/atom/A as anything in T)
+				if (istype(A, /obj))
+					var/obj/O = A
+					if (O.last_explosion == explosion)
+						continue
+					obj_power = highest_explosion_power(O)
+					if (obj_power >= 6)
+						obj_severity = 1
+					else if (obj_power > 3)
+						obj_severity = 2
+					else
+						obj_severity = 3
+					O.ex_act(obj_severity, explosion?.last_touched, obj_power, explosion)
+					O?.last_explosion = explosion
+				else if (istype(A, /mob))
+					var/mob/M = A
+					M.ex_act(atom_severity, explosion?.last_touched, atom_power, explosion)
 
-		for (var/turf/T as anything in queued_turfs)
-			explosion = queued_turfs_blame[T]
-			for (var/obj/O in T)
-				if(istype(O, /obj/overlay) || next_turf_safe && istype(O, /obj/window) || O.last_explosion == explosion)
-					continue
-				var/power = highest_explosion_power(O)
-				var/severity
-				if (power >= 6)
-					severity = 1
-				else if (power > 3)
-					severity = 2
-				else
-					severity = 3
-				O.ex_act(severity, explosion?.last_touched, power, explosion)
-				O?.last_explosion = explosion
-
-		LAGCHECK(LAG_HIGH)
-
-		// BEFORE that ordeal (which may sleep quite a few times), fuck the turfs up all at once to prevent lag
-		for (var/turf/T as anything in queued_turfs)
 #ifndef UNDERWATER_MAP
 			if(istype(T, /turf/space))
 				continue
 #endif
-			p = queued_turfs[T]
-			explosion = queued_turfs_blame[T]
 #ifdef EXPLOSION_MAPTEXT_DEBUGGING
-			if (p >= 6)
-				T.maptext = "<span style='color: #ff0000;' class='pixel c sh'>[p]</span>"
-			else if (p > 3)
-				T.maptext = "<span style='color: #ffff00;' class='pixel c sh'>[p]</span>"
+			if (atom_power >= 6)
+				T.maptext = "<span style='color: #ff0000;' class='pixel c sh'>[atom_power]</span>"
+			else if (atom_power > 3)
+				T.maptext = "<span style='color: #ffff00;' class='pixel c sh'>[atom_power]</span>"
 			else
-				T.maptext = "<span style='color: #00ff00;' class='pixel c sh'>[p]</span>"
-
+				T.maptext = "<span style='color: #00ff00;' class='pixel c sh'>[atom_power]</span>"
 #else
-			var/severity = p >= 6 ? 1 : p > 3 ? 2 : 3
 			if(next_turf_safe)
-				if(istype(T, /turf/simulated/wall))
-					continue // they can break even on severity 3
-				else if(istype(T, /turf/simulated))
-					severity = max(severity, 3)
-			T.ex_act(severity, explosion?.last_touched, null, explosion)
+				if (istype(T, /turf/simulated))
+					if(istype(T, /turf/simulated/wall))
+						continue // walls can break even on severity 3
+					atom_severity = 3
+			T.ex_act(atom_severity, explosion?.last_touched, null, explosion)
 #endif
-		LAGCHECK(LAG_HIGH)
 
 		kaboom_ready = FALSE
 		queued_turfs.len = 0
@@ -204,11 +198,12 @@ var/datum/explosion_controller/explosions
 	proc/explode()
 		logMe(power)
 
-		for(var/client/C in clients)
-			if(C.mob && (C.mob.z == epicenter.z) && power > 20)
-				shake_camera(C.mob, 8, 24) // remove if this is too laggy
+		if (power > 20)
+			for(var/client/C as anything in clients)
+				if(C.mob && (C.mob.z == epicenter.z))
+					shake_camera(C.mob, 8, 24) // remove if this is too laggy
 
-				playsound(C.mob, explosions.distant_sound, 70, 0)
+					playsound(C.mob, explosions.distant_sound, 70, 0)
 
 		playsound(epicenter.loc, "explosion", 100, 1, round(power, 1) )
 		if(power > 10)
