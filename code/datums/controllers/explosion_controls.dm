@@ -115,6 +115,7 @@ var/datum/explosion_controller/explosions
 					atom_severity = 3
 			T.ex_act(atom_severity, explosion?.last_touched, null, explosion)
 #endif
+			LAGCHECK(LAG_HIGH)
 
 		kaboom_ready = FALSE
 		queued_turfs.len = 0
