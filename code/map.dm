@@ -682,6 +682,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/atlas/init()
 	. = ..()
+	var/datum/terrainify/T
 	if(!station_repair.station_generator && prob(66))
 		if( !mapSwitcher.thisMapWasVotedFor )
 			logTheThing(LOG_DEBUG, null, "Automatic Atlas Terrainify skipped due to unvoted map change")
@@ -692,9 +693,7 @@ var/global/list/mapNames = list(
 										/datum/terrainify/winterify,
 										/datum/terrainify/forestify,
 										/datum/terrainify/desertify)
-		var/datum/terrainify/T = pick(terrainify_options)
-		for_by_tcl(spawner, /obj/eva_suit_spawner)
-			spawner.spawn_gear(T)
+		T = pick(terrainify_options)
 		T = new T()
 		var/terrain_params = T.get_default_params()
 
@@ -706,6 +705,9 @@ var/global/list/mapNames = list(
 			terrain_params["Syndi Camo"] = TRUE
 		if("Mining" in terrain_params)
 			terrain_params["Mining"] = weighted_pick(list("None"=5,"Normal"=50,"Rich"=45))
+
+	for_by_tcl(spawner, /obj/eva_suit_spawner)
+		spawner.spawn_gear(T?.type)
 
 #if defined(LIVE_SERVER)
 		T.perform_terrainify(terrain_params, src)
