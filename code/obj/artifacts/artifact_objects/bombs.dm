@@ -42,7 +42,7 @@ ABSTRACT_TYPE(/datum/artifact/bomb)
 	effect_activate(var/obj/O)
 		if (..())
 			return
-		ON_COOLDOWN(O, "bomb_processs", 4 SECONDS) // approx machinery tick rate
+		ON_COOLDOWN(O, "bomb_process", 4 SECONDS) // approx machinery tick rate
 		var/turf/T = get_turf(O)
 		src.detonation_time = TIME + src.explode_delay
 		if(recharge_delay && ON_COOLDOWN(O, "bomb_cooldown", recharge_delay))

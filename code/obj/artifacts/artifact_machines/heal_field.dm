@@ -46,7 +46,7 @@
 	effect_process(var/obj/O)
 		if (..())
 			return
-		if (ON_COOLDOWN(O, "gas_pulse", 4 SECONDS))
+		if (ON_COOLDOWN(O, "heal_pulse", 4 SECONDS))
 			return
 		for (var/mob/living/carbon/M in range(O,src.field_radius))
 			if (src.field_type == ART_HARMING)
