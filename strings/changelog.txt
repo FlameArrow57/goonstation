@@ -1,4 +1,13 @@
 
+(t)tue feb 10 26
+(u)Cheekybrdy
+(p)25840
+(e)🗺💡|A-Mapping, A-Station-Systems
+(+)Cog1's gravity tether is now in the engineering hangar.
+(u)glowbold
+(p)25872
+(e)⚗🔬🚗|A-Chemistry, A-Science, A-Vehicles
+(*)Magnet boots are more resistant to teleportation. This is both a buff and a nerf.
 (t)sun feb 08 26
 (u)JORJ949
 (p)25795
