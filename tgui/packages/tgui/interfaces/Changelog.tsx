@@ -61,16 +61,16 @@ export const Changelog = () => {
           <Tabs.Tab selected={tabIndex === 1} onClick={() => setTabIndex(1)}>
             Changes
           </Tabs.Tab>
-          {is_admin ? (
+          {is_admin &&
             <Tabs.Tab selected={tabIndex === 2} onClick={() => setTabIndex(2)}>
               Admin
             </Tabs.Tab>
-          ) : null}
+          }
           <Tabs.Tab selected={tabIndex === 3} onClick={() => setTabIndex(3)}>
             Attribution
           </Tabs.Tab>
         </Tabs>
-        {tabIndex === 1 ? (
+        {tabIndex === 1 &&
           <Stack vertical>
             <Stack.Item>
               <AllEntries
@@ -85,13 +85,15 @@ export const Changelog = () => {
               </Section>
             </Stack.Item>
           </Stack>
-        ) : tabIndex === 2 ? (
+        }
+        {tabIndex === 2 &&
           <AllEntries
             dates={admin_entry_dates}
             maj_changes={admin_major_entries}
             min_changes={admin_minor_entries}
           />
-        ) : (
+        }
+        {tabIndex === 3 &&
           <Box>
             <Section title={'Licensing'}>
               {`Except where otherwise noted, Goonstation is licensed under the ${(<a href={'https://creativecommons.org/licenses/by-nc-sa/3.0/'}>{'Creative Commons Attribution-Noncommercial-Share Alike 3.0 License'}</a>)}.`}
@@ -107,7 +109,7 @@ export const Changelog = () => {
               </Stack>
             </Section>
           </Box>
-        )}
+        }
       </Window.Content>
     </Window>
   );
