@@ -96,7 +96,12 @@ export const Changelog = () => {
         {tabIndex === 3 && (
           <Box>
             <Section title={'Licensing'}>
-              {`Except where otherwise noted, Goonstation is licensed under the ${(<a href={'https://creativecommons.org/licenses/by-nc-sa/3.0/'}>{'Creative Commons Attribution-Noncommercial-Share Alike 3.0 License'}</a>)}.`}
+              Except where otherwise noted, Goonstation is licensed under the{' '}
+              <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">
+                Creative Commons Attribution-Noncommercial-Share Alike 3.0
+                License
+              </a>
+              .
             </Section>
             <Section title={'Official Development Team'}>
               <Stack vertical>
@@ -159,15 +164,30 @@ const EntriesList = (props: EntriesProps) => {
         <Stack.Item key={index} mb={0.5}>
           <Stack vertical>
             <Stack.Item>
-              {`${item.author}: ${item.pr_num ? <a href={`https://github.com/goonstation/goonstation/pull/${item.pr_num}`}>{`#${item.pr_num}`}</a> : null}`}
-              {!!item.emojis && (
-                <Tooltip content={item.emoji_tooltips}>{item.emojis}</Tooltip>
-              )}
+              <Stack>
+                <Stack.Item>
+                  <b>{item.author}</b> updated:
+                </Stack.Item>
+                {!!item.emojis && (
+                  <Stack.Item>
+                    <Tooltip content={item.emoji_tooltips}>
+                      {item.emojis}
+                    </Tooltip>
+                  </Stack.Item>
+                )}
+                {!!item.pr_num && (
+                  <Stack.Item grow textAlign="right">
+                    <a
+                      href={`https://github.com/goonstation/goonstation/pull/${item.pr_num}`}
+                    >{`#${item.pr_num}`}</a>
+                  </Stack.Item>
+                )}
+              </Stack>
             </Stack.Item>
             <Stack.Item>
-              <Stack vertical>
+              <Stack vertical pl={1}>
                 {item.changes.map((change, ind) => (
-                  <Stack.Item key={ind}>{`-${change}`}</Stack.Item>
+                  <Stack.Item key={ind}>{change}</Stack.Item>
                 ))}
               </Stack>
             </Stack.Item>
