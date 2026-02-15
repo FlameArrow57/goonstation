@@ -81,7 +81,8 @@ export const Changelog = () => {
             </Stack.Item>
             <Stack.Item>
               <Section title={'Goonstation contributors'}>
-                {`Older changes can be viewed on the ${(<a href={'https://wiki.ss13.co/Changelog'}>{'wiki'}</a>)}.`}
+                Older changes can be viewed on the{' '}
+                <a href={'https://wiki.ss13.co/Changelog'}>wiki</a>.
               </Section>
             </Stack.Item>
           </Stack>
@@ -179,7 +180,9 @@ const EntriesList = (props: EntriesProps) => {
                   <Stack.Item grow textAlign="right">
                     <a
                       href={`https://github.com/goonstation/goonstation/pull/${item.pr_num}`}
-                    >{`#${item.pr_num}`}</a>
+                    >
+                      {`#${item.pr_num}`}
+                    </a>
                   </Stack.Item>
                 )}
               </Stack>
