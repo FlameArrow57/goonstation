@@ -28,7 +28,7 @@ interface ChangelogEntries {
   entry_dates: string[];
   major_entries: Entry[][];
   minor_entries: Entry[][];
-  is_admin: boolean;
+  is_admin: BooleanLike;
   admin_entry_dates: string[];
   admin_major_entries: Entry[][];
   admin_minor_entries: Entry[][];
@@ -61,7 +61,7 @@ export const Changelog = () => {
           <Tabs.Tab selected={tabIndex === 1} onClick={() => setTabIndex(1)}>
             Changes
           </Tabs.Tab>
-          {is_admin && (
+          {!!is_admin && (
             <Tabs.Tab selected={tabIndex === 2} onClick={() => setTabIndex(2)}>
               Admin
             </Tabs.Tab>
