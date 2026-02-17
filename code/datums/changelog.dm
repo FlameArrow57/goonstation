@@ -26,13 +26,8 @@ so you'll want your single-digit days to have 0s in front
 /datum/changelog
 	var/testmerge_changes = null
 
-	var/list/entry_dates = list()
-	var/list/major_entries = list()
-	var/list/minor_entries = list()
-
-	var/list/admin_entry_dates = list()
-	var/list/admin_major_entries = list()
-	var/list/admin_minor_entries = list()
+	var/list/entries
+	var/list/admin_entries
 
 	New()
 		..()
@@ -45,15 +40,8 @@ so you'll want your single-digit days to have 0s in front
 				src.testmerge_changes += log
 		#endif
 
-		var/list/clog_output = src.create_changelog_entries(file2text("strings/changelog.txt"), src.testmerge_changes)
-		src.entry_dates = clog_output[1]
-		src.major_entries = clog_output[2]
-		src.minor_entries = clog_output[3]
-
-		clog_output = src.create_changelog_entries(file2text("strings/admin_changelog.txt"))
-		src.admin_entry_dates = clog_output[1]
-		src.admin_major_entries = clog_output[2]
-		src.admin_minor_entries = clog_output[3]
+		src.entries = src.create_changelog_entries(file2text("strings/changelog.txt"), src.testmerge_changes)
+		src.admin_entries = src.create_changelog_entries(file2text("strings/admin_changelog.txt"))
 
 /datum/changelog/ui_interact(mob/user, datum/tgui/ui)
 	ui = tgui_process.try_update_ui(user, src, ui)
@@ -62,13 +50,9 @@ so you'll want your single-digit days to have 0s in front
 		ui.open()
 
 /datum/changelog/ui_static_data(mob/user)
-	. = list("entry_dates" = src.entry_dates,
-			 "major_entries" = src.major_entries,
-			 "minor_entries" = src.minor_entries,
+	. = list("entries" = src.entries,
 			 "is_admin" = isadmin(user),
-			 "admin_entry_dates" = src.admin_entry_dates,
-			 "admin_major_entries" = src.admin_major_entries,
-			 "admin_minor_entries" = src.admin_minor_entries
+			 "admin_entries" = src.admin_entries
 			 )
 
 /datum/changelog/ui_state(mob/user)
@@ -176,13 +160,11 @@ so you'll want your single-digit days to have 0s in front
 			else
 				continue
 
-	var/list/ma_entries = list()
-	var/list/mi_entries = list()
+	var/list/cl_entries = list()
 	for (var/day in ent_dates)
-		ma_entries.Add(list(maj_entries[day]))
-		mi_entries.Add(list(min_entries[day]))
+		cl_entries += list(list("entry_date" = day, "major_entries" = maj_entries[day], "minor_entries" = min_entries[day]))
 
-	return list(ent_dates, ma_entries, mi_entries)
+	return cl_entries
 
 /// Creates a date string from a auto-generated changelog date
 /datum/changelog/proc/changelog_date_parse(dateline)

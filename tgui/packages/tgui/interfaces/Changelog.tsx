@@ -5,6 +5,7 @@
  * @license ISC
  */
 
+import { BooleanLike } from 'common/react';
 import { useState } from 'react';
 import {
   Box,
@@ -25,13 +26,15 @@ const devTeamSpriters =
   'Supernorn, Haruhi, Stuntwaffle, Pantaloons, Rho, SynthOrange, I Said No, Cogwerks, Aphtonites, Hempuli, Gannets, Haine, SLthePyro, Sundance, Azungar, Flaborized, Erinexx, & Walpvrgis';
 
 interface ChangelogEntries {
-  entry_dates: string[];
-  major_entries: Entry[][];
-  minor_entries: Entry[][];
+  entries: Entries[];
   is_admin: BooleanLike;
-  admin_entry_dates: string[];
-  admin_major_entries: Entry[][];
-  admin_minor_entries: Entry[][];
+  admin_entries: Entries[];
+}
+
+interface Entries {
+  entry_date: string;
+  major_entries: Entry[];
+  minor_entries: Entry[];
 }
 
 interface Entry {
@@ -44,15 +47,7 @@ interface Entry {
 
 export const Changelog = () => {
   const { data } = useBackend<ChangelogEntries>();
-  const {
-    entry_dates,
-    major_entries,
-    minor_entries,
-    is_admin,
-    admin_entry_dates,
-    admin_major_entries,
-    admin_minor_entries,
-  } = data;
+  const { entries, is_admin, admin_entries } = data;
   const [tabIndex, setTabIndex] = useState(1);
   return (
     <Window title="Changelog">
@@ -73,11 +68,7 @@ export const Changelog = () => {
         {tabIndex === 1 && (
           <Stack vertical>
             <Stack.Item>
-              <AllEntries
-                dates={entry_dates}
-                maj_changes={major_entries}
-                min_changes={minor_entries}
-              />
+              <AllEntries entries={entries} />
             </Stack.Item>
             <Stack.Item>
               <Section title={'Goonstation contributors'}>
@@ -87,13 +78,7 @@ export const Changelog = () => {
             </Stack.Item>
           </Stack>
         )}
-        {tabIndex === 2 && (
-          <AllEntries
-            dates={admin_entry_dates}
-            maj_changes={admin_major_entries}
-            min_changes={admin_minor_entries}
-          />
-        )}
+        {tabIndex === 2 && <AllEntries entries={admin_entries} />}
         {tabIndex === 3 && (
           <Box>
             <Section title={'Licensing'}>
@@ -122,28 +107,28 @@ export const Changelog = () => {
 };
 
 interface AllEntriesProps {
-  dates: string[];
-  maj_changes: Entry[][];
-  min_changes: Entry[][];
+  entries: Entries[];
 }
 
 const AllEntries = (props: AllEntriesProps) => {
-  const { dates, maj_changes, min_changes } = props;
+  const { entries } = props;
   return (
     <Box>
-      {dates.map((item, index) => (
+      {entries.map((item, index) => (
         <Section
-          title={item}
+          title={item.entry_date}
           key={index}
-          backgroundColor={item.includes('Testmerge') ? 'black' : null}
+          backgroundColor={
+            item.entry_date.includes('Testmerge') ? 'black' : null
+          }
         >
-          {!!maj_changes[index]?.length && (
-            <EntriesList entries={maj_changes[index]} />
+          {!!item.major_entries?.length && (
+            <EntriesList entries={item.major_entries} />
           )}
-          {!!min_changes[index]?.length && (
+          {!!item.minor_entries?.length && (
             <Collapsible title="Minor Changes">
               <Box ml={1}>
-                <EntriesList entries={min_changes[index]} />
+                <EntriesList entries={item.minor_entries} />
               </Box>
             </Collapsible>
           )}
