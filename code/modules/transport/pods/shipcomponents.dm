@@ -20,6 +20,8 @@
 	var/disrupted = FALSE
 	/// Can this part be used by 2x2 pods
 	var/large_pod_compatible = TRUE
+	/// Can it be removed by a player
+	var/removable = TRUE
 
 	New()
 		..()

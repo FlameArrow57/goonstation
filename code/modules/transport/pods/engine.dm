@@ -4,7 +4,6 @@
 	name = "Warp-1 Engine"
 	desc = "A standard engine."
 	var/powergenerated = 200 //how much power for components the engine generates
-	var/currentgen = 200 //handles engine power debuffs
 	var/warprecharge = 300 //Interval it takes for warp to be ready again
 	//delay between dropping wormhole and being able to enter it
 	var/portaldelay = 3 SECONDS
@@ -80,7 +79,6 @@
 
 		var/dat = "<TT><B>[src] Console</B><BR><HR><BR>"
 		if(src.active)
-			dat+=  {"<BR><B>Current Output:</B> [currentgen]"}
 			dat+=  {"<BR><B>Standard Ouput:</B> [powergenerated]"}
 			dat+=  {"<BR><B>Engine Status:</B> [status]"}
 			dat+=  {"<BR><B>Current Load:</B> [ship.powercurrent]"}
@@ -248,7 +246,6 @@
 	name = "Scout Engine"
 	desc = "An engine optimized for speed and warp travel over power. Warning: Power is insufficient to operate most non-factory installed pod components."
 	powergenerated = 50
-	currentgen = 50
 	warprecharge = 5 SECONDS
 	engine_speed = 1.3
 	icon_state = "engine-0"
@@ -257,7 +254,6 @@
 	name = "Helios Mark-II Engine"
 	desc = "A really fast engine."
 	powergenerated = 300 //how much power for components the engine generates
-	currentgen = 300 //handles engine power debuffs
 	warprecharge = 150 //Interval it takes for warp to be ready again
 	engine_speed = 1.15
 	icon_state = "engine-2"
@@ -266,7 +262,6 @@
 	name = "Hermes 3.0 Engine"
 	desc = "An incredibly powerful but slow engine."
 	powergenerated = 500
-	currentgen = 500
 	warprecharge = 300
 	engine_speed = 0.7
 	icon_state = "engine-3"
@@ -275,7 +270,6 @@
 	name = "Warp-0 Engine"
 	desc = "An old prototype engine."
 	powergenerated = 190
-	currentgen = 190
 	warprecharge = -1 //This disables the ability to create wormholes completely.
 	engine_speed = 1.1
 	icon_state = "engine-4"
