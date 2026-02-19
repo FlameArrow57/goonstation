@@ -126,7 +126,9 @@
 	return
 
 /obj/item/shipcomponent/proc/ship_install()
+	src.ship.componentsPower += src.power_used
 	return
 
 /obj/item/shipcomponent/proc/ship_uninstall()
+	src.ship.componentsPower -= src.power_used
 	return
