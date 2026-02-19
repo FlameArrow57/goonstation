@@ -69,7 +69,7 @@ SET_UP_DIRECTIONALS(/obj/noticeboard, OFFSETS_NOTICEBOARD)
 			boutput(user, SPAN_NOTICE("You pin \the [O] to the noticeboard."))
 		else
 			boutput(user, SPAN_ALERT("You reach to pin your paper to the board but hesitate. You are certain your paper will not be seen among the many others already attached."))
-
+		tgui_process.update_uis(src)
 
 /obj/noticeboard/update_icon()
 	src.icon_state = "nboard0[min(src.notices, 5)]"
