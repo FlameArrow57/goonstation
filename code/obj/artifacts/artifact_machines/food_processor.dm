@@ -5,7 +5,6 @@
 /obj/artifact/food_processor
 	name = "artifact food processor"
 	associated_datum = /datum/artifact/food_processor
-	processes = TRUE
 
 	ArtifactHitWith(obj/item/I, mob/user)
 		var/datum/artifact/food_processor/artifact = src.artifact

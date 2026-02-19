@@ -1,7 +1,6 @@
 /obj/artifact/robot
 	name = "drone"
 	associated_datum = /datum/artifact/robot
-	processes = TRUE
 
 /datum/artifact/robot
 	associated_object = /obj/artifact/robot
